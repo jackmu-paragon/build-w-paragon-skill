@@ -26,7 +26,7 @@ curl --request GET \
 
 The `LIST ACTIONS` API will return a result in this format:
 
-```
+```json
 {
   "actions": {
     "hubspot": [

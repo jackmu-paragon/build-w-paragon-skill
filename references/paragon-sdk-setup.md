@@ -26,7 +26,7 @@ npm install @useparagon/connect
 
 - [ ] Build a server-side endpoint to sign a JWT with the `Signing Key` with the following data
 
-```
+```json
 {
 	// Uniquely identifying key for a user or their company
 	"sub": "the-user/company-id",

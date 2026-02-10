@@ -32,7 +32,7 @@ paragon.getIntegrationMetadata();
 
 This method will return data with this schema:
 
-```
+```json
 [
   {
     type: 'salesforce',

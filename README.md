@@ -1,30 +1,30 @@
 # Build With Paragon Skill
 
 ## Getting Started
-- Navigate to the **skills** directory of your agentic IDE
+1. Navigate to the **skills** directory of your agentic IDE
 
-### For Cursor
+**For Cursor**
 ```
 ~/.cursor/skills/
 ```
 
-### For Claude Code
+**For Claude Code**
 ```
 ~/.claude/skills
 ```
 
-### For Opencode
+**For Opencode**
 ```
 ~/.config/opencode/skills
 ```
 
-- Create a directory called `build-w-paragon`
+2. Create a directory called `build-w-paragon`
 
 ```bash
 mkdir build-w-paragon
 ```
 
-- Navigate to `build-w-paragon` and clone this repo
+3. Navigate to `build-w-paragon` and clone this repo
 
 ## Future additions
 Advanced use cases:

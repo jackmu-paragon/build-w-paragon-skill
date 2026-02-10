@@ -7,7 +7,7 @@ and keep that data up-to-date. These data pipelines live in Paragon's infrastruc
 and are completely managed by Paragon. Developer can easily start syncs, pause syncs, 
 and pull synced data.
 
-When integration data in synced, that data is also normalized across that integration's category. For example, the data schema from Google Drive, Dropbox, Box, and Sharepoint are all normalized so that code/logic can be used across that category.
+When integration data is synced, that data is also normalized across that integration's category. For example, the data schema from Google Drive, Dropbox, Box, and Sharepoint are all normalized so that code/logic can be used across that category.
 
 For file storage integration data, the Permissions API is an API to check permissions 
 of any synced file. Paragon manages a graph database behind the scenes, so developers 
@@ -53,28 +53,161 @@ Output will be in this format:
 ```bash
 curl --request GET \
   --url https://sync.useparagon.com/api/syncs/{syncId}/records \
-  --header 'Authorization: Bearer PARAGON_TOKEN'
+  --header 'Authorization: Bearer PARAGON_JWT'
 ```
 
-The data will vary based off the integration and category of the synd pipeline
+The data will vary based off the integration and category of the syne pipeline, but will be in this general format:
+
+```json
+{
+  "data": "[/* Varied schema based off integration */]",
+  "paging": {
+    "totalRecords": 123,
+    "totalActiveRecords": 123,
+    "remainingRecords": 123,
+    "cursor": "<string>",
+    "lastSeen": 123
+  }
+}
+```
 
 - The `Get Synced Record` endpoint gets the data of a specified synced object
 
 ```bash
 curl --request GET \
   --url https://sync.useparagon.com/api/syncs/{syncId}/records/{recordId} \
-  --header 'Authorization: Bearer PARAGON_TOKEN'
+  --header 'Authorization: Bearer PARAGON_JWT'
 ```
 
-The data will vary based off the integration and category of the synd pipeline
+The data will vary based off the integration and category of the syne pipeline
 
 - For file storage integrations, the `Download File Content` endpoint will return the binary data of a synced file
 
 ```bash
 curl --request GET \
   --url https://sync.useparagon.com/api/syncs/{syncId}/records/{recordId}/content \
-  --header 'Authorization: Bearer PARAGON_TOKEN'
+  --header 'Authorization: Bearer PARAGON_JWT'
 ```
+
+### Sync Webhooks
+After a sync pipeline has been created/enabled, the developer will receive webhook eventsto the URL they configure in the Paragon dashboard.
+
+Events will have this general schema:
+
+```json
+{
+	"event": "[event type]",
+	"sync": "[integration name]",
+	"syncInstanceId": "[ID of Sync]",
+	"user": {
+		"id": "[ID of Connected User]"
+	}
+}
+```
+
+Here are some specific event types:
+- `sync_complete`
+
+```json
+{
+  "event": "sync_complete",
+  "syncInstanceId": "163a345e-2dd4-51ff-bcf5-7667de564bb0",
+  "sync": "googledrive",
+  "user": {
+    "id": "user_01JH448D13EX2BE1SC1GXVT05R"
+  },
+  "data": {
+    "model": "files",
+    "syncedAt": "2025-07-07T19:00:00.000Z",
+    "numRecords": 1000
+  }
+}
+```
+
+- `sync_errored`
+
+```json
+{
+  "event": "sync_errored",
+  "syncInstanceId": "f543fd08-5d36-56d7-bd5e-8306e82acb16",
+  "sync": "googledrive",
+  "user": {
+    "id": "user_01JH448D13EX2BE1SC1GXVT05R"
+  },
+  "error": {
+    "message": "Credentials are no longer valid. Please re-authenticate the user's Google Drive account."
+  }
+}
+```
+
+- `record_created`
+
+```json
+{
+  "event": "record_created",
+  "syncInstanceId": "163a345e-2dd4-51ff-bcf5-7667de564bb0",
+  "sync": "googledrive",
+  "user": {
+    "id": "user_01JH448D13EX2BE1SC1GXVT05R"
+  },
+  "data": {
+    "recordId": "3ce16e33-0163-564d-98ce-99b0a25ab375",
+    "model": "files"
+  }
+}
+```
+- `record_updated`
+
+```json
+{
+  "event": "record_updated",
+  "syncInstanceId": "163a345e-2dd4-51ff-bcf5-7667de564bb0",
+  "sync": "googledrive",
+  "user": {
+    "id": "user_01JH448D13EX2BE1SC1GXVT05R"
+  },
+  "data": {
+    "recordId": "3ce16e33-0163-564d-98ce-99b0a25ab375",
+    "model": "files"
+  }
+}
+```
+
+- `record_deleted`
+
+```json
+{
+  "event": "record_deleted",
+  "syncInstanceId": "0df4921d-0ac4-5c90-b30e-7a9da9c2d02f",
+  "sync": "googledrive",
+  "user": {
+    "id": "user_01JH448D13EX2BE1SC1GXVT05R"
+  },
+  "data": {
+	"model": "files",
+	"recordId": "3ce16e33-0163-564d-98ce-99b0a25ab375"
+  }
+}
+```
+
+- `record_errored`
+
+```json
+{
+  "event": "record_errored",
+  "syncInstanceId": "0df4921d-0ac4-5c90-b30e-7a9da9c2d02f",
+  "sync": "googledrive",
+  "user": {
+    "id": "user_01JH448D13EX2BE1SC1GXVT05R"
+  },
+  "error": {
+    "message": "Request failed with status code 404",
+    "recordId": "68c3e715-b466-544f-ba2a-165973d85a58",
+    "model": "files"
+  }
+}
+```
+
 
 ### Permissions API
 For file storage integrations (Google Drive, Sharepoint, Box, etc.), Paragon will manage a permissions 
@@ -86,7 +219,7 @@ allowed parties.
 ```bash
  curl --request POST \
   --url https://sync.useparagon.com/api/permissions/{syncId}/batch-check \
-  --header 'Authorization: Bearer PARAGON_TOKEN' \
+  --header 'Authorization: Bearer PARAGON_JWT' \
   --header 'Content-Type: application/json' \
   --data '
 {
@@ -124,7 +257,7 @@ This endpoint will return data in the following format:
 ```bash
 curl --request POST \
   --url https://sync.useparagon.com/api/permissions/{syncId}/list-users \
-  --header 'Authorization: Bearer PARAGON_TOKEN' \
+  --header 'Authorization: Bearer PARAGON_JWT' \
   --header 'Content-Type: application/json' \
   --data '
 {
@@ -149,7 +282,7 @@ This will return data in the following format:
 ```bash
 curl --request POST \
   --url https://sync.useparagon.com/api/permissions/{syncId}/list-objects \
-  --header 'Authorization: Bearer PARAGON_TOKEN' \
+  --header 'Authorization: Bearer PARAGON_JWT' \
   --header 'Content-Type: application/json' \
   --data '
 {

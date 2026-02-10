@@ -26,16 +26,16 @@ npm install @useparagon/connect
 
 - [ ] Build a server-side endpoint to sign a JWT with the `Signing Key` with the following data
 
-```json
+```typescript
 {
 	// Uniquely identifying key for a user or their company
 	"sub": "the-user/company-id",
     // Audience claim, must match the project ID in the SDK configuration
-    "aud": "useparagon.com/{paragon-project-id}"
+    "aud": "useparagon.com/{paragon-project-id}",
 	// Issue timestamp, should be the current time
-	"iat": 1608600116
+	"iat": 1608600116,
 	// Expiry timestamp for token, such as 1 hour from time of signature (iat)
-	"exp": 1608603716
+	"exp": 1608603716,
 }
 ```
   - This should NOT be done on the client. The `Signing Key` should only be exposed to server side applications

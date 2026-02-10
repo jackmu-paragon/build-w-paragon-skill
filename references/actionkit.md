@@ -1,7 +1,7 @@
 # ActionKit for 3rd-party integration actions
 
 ## ActionKit Overview
-ActionKit is an API that provides useful abstrated actions that work with your users' integration and run on their behalf.
+ActionKit is an API that provides useful abstracted actions that work with your users' integration and run on their behalf.
 
 Some examples of ActionKit actions are: 
 - `NOTION_CREATE_PAGE`
@@ -115,7 +115,7 @@ Here's an example using Vercel's AI-SDK
 import { generateText, jsonSchema, tool } from "ai";
 import { openai } from "@ai-sdk/openai";
 
-const response = await fetch("https://actionkit.useparagon.com/projects/<Project ID>/actions", {
+const response = await fetch("https://actionkit.useparagon.com/projects/<Project ID>/actions?format=json_schema", {
     method: "GET",
     headers: {
       Authorization: `Bearer ${paragonUserToken}`,

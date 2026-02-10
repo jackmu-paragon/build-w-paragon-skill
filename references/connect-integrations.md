@@ -61,12 +61,12 @@ The developer can use the integration metadata to build catalogs in their fronte
 
 ```tsx
 <div className="flex flex-wrap">
-  {integrationMetadata.map((integration: IntegrationMetadata) => {
-    <div key={integraiton.type} className="flex gap-4">
+  {integrationMetadata.map((integration: IntegrationMetadata) => (
+    <div key={integration.type} className="flex gap-4">
       <div>{integration.name}</div>
       <button onClick={() => paragon.connect(integration.type)} />
     </div>
-  })}
+  ))}
 </div>
 ```
 

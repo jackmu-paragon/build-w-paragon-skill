@@ -43,7 +43,7 @@ curl --request POST \
   --header 'Authorization: Bearer PARAGON_JWT'
 ```
 
-- `RE-ENABLE SYNC` to disable a specified sync pipeline
+- `RE-ENABLE SYNC` to re-enable a disabled sync pipeline
 
 ```bash
 curl --request POST \
@@ -51,10 +51,10 @@ curl --request POST \
   --header 'Authorization: Bearer PARAGON_JWT'
 ```
 
-- `DELETE SYNC` to disable a specified sync pipeline
+- `DELETE SYNC` to delete a specified sync pipeline
 
 ```bash
 curl --request DELETE \
   --url https://sync.useparagon.com/api/syncs/{syncId} \
-  --header 'Authorization: Bearer PARAGON_TOKEN'
+  --header 'Authorization: Bearer PARAGON_JWT'
 ```

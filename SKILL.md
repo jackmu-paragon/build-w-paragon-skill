@@ -1,7 +1,6 @@
 ---
 name: build-with-paragon
 description: Skill for building integrations with Paragon's API and SDK
-compatibility: opencode
 ---
 
 ## What the build-with-paragon Skill does

@@ -89,6 +89,17 @@ curl --request GET \
   --header 'Authorization: Bearer PARAGON_JWT'
 ```
 
+### Sync Pipeline Statuses
+After a sync pipeline is created for a specific integration using the `POST api/syncs` endpoint,
+the sync pipeline will enter one of these statuses:
+- `INITIALIZING`: The Sync has just been created and is pending its first run.
+- `ACTIVE`: The Sync is actively fetching new data.
+- `IDLE`: The Sync has completed and is watching for updates to synced data.
+- `DISABLED`: The Sync has been paused temporarily by the Disable a Sync endpoint.
+- `ERRORED`: The Sync has been suspended due to an error. Check Webhook Events for additional error details.
+
+For more information on how to check the status, reference the [sync management guide](sync-management.md)
+
 ### Sync Webhooks
 After a sync pipeline has been created/enabled, the developer will receive webhook eventsto the URL they configure in the Paragon dashboard.
 

@@ -4,6 +4,7 @@ Use these additional endpoints if a developer needs to interact with the lifecyc
 ## Overview
 Available endpoints to manage a sync pipeline:
 - `LIST SYNCS`
+- `GET SYNC STATUS`
 - `DISABLE SYNC`
 - `RE-ENABLE SYNC`
 - `DELETE SYNC`
@@ -32,6 +33,27 @@ Returned data:
       "dateUpdated": "2023-11-07T05:31:56Z"
     }
   ]
+}
+```
+
+- `GET SYNC STATUS` to get the status of a specific sync pipeline
+
+```bash
+curl --request GET \
+  --url https://sync.useparagon.com/api/syncs/{syncId} \
+  --header 'Authorization: Bearer PARAGON_JWT'
+```
+
+Returned data:
+```json
+{
+  "status": "INITIALIZING",
+  "summary": {
+    "totalRecords": 123,
+    "syncedRecordsCount": 123,
+    "lastSyncedAt": "2023-11-07T05:31:56Z",
+    "latestCursor": "<string>"
+  }
 }
 ```
 
